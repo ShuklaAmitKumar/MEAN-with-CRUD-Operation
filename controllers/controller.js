@@ -44,20 +44,13 @@ exports.product_details = function (req, res, next) {
 };
 
 exports.product_update = function (req, res, next) {
-    Product.findByIdAndUpdate(req.params.id, { $set: req.body }, function (err, data) {
+    Product.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true }, function (err, data) {
+        // {new : true} is for get the new updated data
+        // if you removes that that will give old data
         if (err) return next(err);
         if (!data) {
             return res.send({ 'msg': 'Data does not exists' });
         }
-        /*
-        Product.findById(req.params.id, function (err, data) {
-            if (err) return next(err);
-            if (!data) {
-                return res.send({ 'msg': 'Data does not exists' });
-            }
-            res.send(data);
-        })
-        */
         res.send({ 'msg': 'Data updated.', 'data': data });
     });
 };
